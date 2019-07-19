@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/plan/plan",
+    "pages/check/check",
+    "pages/past/past"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#FAFAFA",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "TouchUI",
+    "navigationBarTextStyle": "black"
+  },
+  "networkTimeout": {
+    "request": 10000
+  },
+  "theme": {
+    "theme-color": "#39f"
+  }
+}

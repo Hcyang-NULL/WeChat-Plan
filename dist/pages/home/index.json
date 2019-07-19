@@ -1,0 +1,7 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "ToDo-List",
+  "backgroundColor": "#F5F5F5",
+  "navigationBarTextStyle": "black",
+  "disableScroll": true
+}

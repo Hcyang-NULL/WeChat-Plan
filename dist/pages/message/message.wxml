@@ -1,0 +1,33 @@
+<view class="root" style="background-color:{{flower_color}}">
+  <view class="form">
+    <view class="name">
+      <view class="name_text">收信人:</view>
+      <input maxlength="20" class="name_input" bindinput="name_input" value="{{name}}"></input>
+    </view>
+    <view class="birthday">
+      <view class="birthday_text">国历生日:</view>
+      <view class="birthday_select">
+        <view class="select1">
+          <view class="select1_text">月份:</view>
+          <ui-stepper min="1" max="12" value="5" class="select_month" bindsubtraction="change1" bindaddition="change1" _pid="{{_pid}}"></ui-stepper>
+        </view>
+        <view class="select2">
+          <view class="select2_text">日期:</view>
+          <ui-stepper min="1" max="31" value="12" class="select_day" bindsubtraction="change2" bindaddition="change2" _pid="{{_pid}}"></ui-stepper>
+        </view>
+      </view>
+    </view>
+    <view class="content">
+      <view class="content_text">内容</view>
+      <view class="content_input">
+        <textarea class="content_area" maxlength="800" bindinput="content_input" value="{{content}}"></textarea>
+      </view>
+    </view>
+    <cover-view class="confirm">
+      <cover-view class="confirm_png">
+        <cover-image src="../../imgs/send_confirm.png" mode="aspectFit" bindtap="send" class="cover-img">
+        </cover-image>
+      </cover-view>
+    </cover-view>
+  </view>
+</view>

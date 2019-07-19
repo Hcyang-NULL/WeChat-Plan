@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "ui-stepper": "../../packages/touchui-wx-components/ui-stepper/dist/index"
+  },
+  "navigationBarTitleText": "写信",
+  "backgroundColor": "#F5F5F5",
+  "navigationBarTextStyle": "black",
+  "disableScroll": true,
+  "flower_color": "#F5F5F5"
+}

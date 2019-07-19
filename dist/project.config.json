@@ -1,0 +1,74 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.6.6",
+	"appid": "wxd72d0c87339be2c9",
+	"projectname": "miniprogram-test-1",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"scripts": {},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 3,
+			"list": [
+				{
+					"id": -1,
+					"name": "写信",
+					"pathName": "pages/message/message",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "收信",
+					"pathName": "pages/recive/recive",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "孙女",
+					"pathName": "pages/yzr/yzr",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "Plan Tomorrow",
+					"pathName": "pages/plan/plan",
+					"query": "tomorrow=20th Jun",
+					"scene": null
+				}
+			]
+		}
+	}
+}

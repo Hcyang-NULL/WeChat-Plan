@@ -1,0 +1,30 @@
+<view class="root">
+  <view class="week">
+    {{cweek}}
+  </view>
+  <view class="date">
+    {{cdate}}
+  </view>
+  <!-- <view class="time">
+            {{ctime}}
+        </view> -->
+  <view class="mission">
+    <view class="title-mission">
+      当前任务
+    </view>
+    <view class="content-mission">
+      {{now_mission}}
+    </view>
+  </view>
+  <view class="btn-container">
+    <view class="make-plan btn" bindtap="plan">
+      Plan Tomorrow
+    </view>
+    <view class="check-plan btn" bindtap="check">
+      Check Today
+    </view>
+    <view class="plan-view btn" bindtap="past">
+      View Past
+    </view>
+  </view>
+</view>

@@ -1,0 +1,235 @@
+<template>
+    <view class="root">
+        <view class="week">
+            {{cweek}}
+        </view>
+        <view class="date">
+            {{cdate}}
+        </view>
+        <!-- <view class="time">
+            {{ctime}}
+        </view> -->
+        <view class="mission">
+            <view class="title-mission">
+                当前任务
+            </view>
+            <view class="content-mission">
+                {{now_mission}}
+            </view>
+        </view>
+        <view class="btn-container">
+            <view class="make-plan btn" bindtap="plan">
+                Plan Tomorrow
+            </view>
+            <view class="check-plan btn" bindtap="check">
+                Check Today
+            </view>
+            <view class="plan-view btn" bindtap="past">
+                View Past
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    const app = getApp();
+    let tomorrow;
+    const weeks = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ];
+    const days = [
+        "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th",
+        "11th", "12th", "13th", "14th", "15th", "16th", "17th", "18th", "19th", "20th",
+        "21st", "22nd", "23rd", "24th", "25th", "26th", "27th", "28th", "29th", "30th", "31st"
+    ]
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ]
+    export default {
+        config: {
+            navigationBarTitleText: 'ToDo-List',
+            backgroundColor: '#F5F5F5',
+            navigationBarTextStyle: 'black',
+            disableScroll: true
+        },
+        data: {
+            cweek: "",
+            cdate: "",
+            ctime: "",
+            now_mission: "无安排"
+        },
+        plan() {
+            console.log("plan tomorrow")
+            const that = this;
+            wx.navigateTo({
+                url: '../plan/plan?tomorrow='+tomorrow,
+            });
+        },
+        check() {
+            wx.navigateTo({
+                url: '../check/check',
+            });
+        },
+        past() {
+            wx.navigateTo({
+                url: '../past/past',
+            });
+        },
+        onLoad() {
+            let date = new Date();
+            let week = date.getDay();
+            let month = date.getMonth();
+            let day = date.getDate();
+            let cdate = days[day-1]+" "+months[month-1]
+            if(day == 31)
+            {
+                tomorrow = days[0]+" "+months[month]
+            }
+            else
+            {
+                tomorrow = days[day]+" "+months[month-1]
+            }
+            let hour = date.getHours();
+            let ctime = ""
+            if(hour < 4)
+            {
+                ctime = "深夜";
+            }
+            else if(hour < 7)
+            {
+                ctime = "清晨";
+            }
+            else if(hour < 12)
+            {
+                ctime = "早上好";
+            }
+            else if(hour < 14)
+            {
+                ctime = "午后";
+            }
+            else if(hour < 19)
+            {
+                ctime = "下午好";
+            }
+            else if(hour < 20)
+            {
+                ctime = "傍晚";
+            }
+            else if(hour < 23)
+            {
+                ctime = "晚上好";
+            }
+            else
+            {
+                ctime = "深夜";
+            }
+            console.log(hour)
+
+
+
+            this.setData({
+                cweek: weeks[week-1],
+                cdate: cdate,
+                ctime: ctime
+            })
+        }
+    }
+</script>
+
+<style lang="less">
+    @import '../../style/DeliciousMocha.wxss';
+
+    .root{
+        border-top: solid 2rpx #EBEBEB;
+        height: 100%;
+        background-color: #F5F5F5
+    }
+
+    .week{
+        width: 100%;
+        height: 15%;
+        font-family: DeliciousMocha;
+        font-size: 300%;
+        text-align: center;
+        line-height: 300%;
+        // border: solid 1rpx;
+    }
+
+    .date{
+        width: 100%;
+        height: 8%;
+        font-family: DeliciousMocha;
+        font-size: 150%;
+        text-align: center;
+
+        // border: solid 1rpx;
+    }
+
+    .time{
+        width: 100%;
+        height: 8%;
+        font-size: 120%;
+        text-align: center;
+        margin-top: 10%;
+        // border: solid 1rpx;
+    }
+
+    .mission{
+        width: 100%;
+        text-align: center;
+        margin-top: 10%;
+    }
+
+    .title-mission{
+        font-size: 120%;
+        margin-bottom: 3%;
+    }
+
+    .content-mission{
+        width: 80%;
+        padding-top: 10rpx;
+        padding-bottom: 10rpx;
+        margin-left: 10%;
+        border: solid 3rpx #EBEBEB;
+        border-radius: 10rpx;
+        background-color: white;
+        box-shadow: 4rpx 4rpx 2rpx rgba(0, 0, 0, .2);
+    }
+
+    .btn-container{
+        width: 100%;
+        margin-top: 30%;
+    }
+
+    .btn{
+        margin-bottom: 5%;
+        width: 60%;
+        margin-left: 20%;
+        text-align: center;
+        border: solid 3rpx #EBEBEB;
+        padding-top: 15rpx;
+        padding-bottom: 15rpx;
+        // background-color: rgb(186, 234, 253);
+        border-radius: 15rpx;
+        font-size: 90%;
+    }
+
+    .make-plan{
+        background-color: rgb(64, 129, 237)
+    }
+
+    .check-plan{
+        background-color: rgb(51, 163, 81)
+    }
+
+    .plan-view{
+        background-color: rgb(228, 65, 52);
+    }
+
+</style>

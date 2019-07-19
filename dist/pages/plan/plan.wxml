@@ -1,0 +1,27 @@
+<view class="root">
+  <view class="tomorrow-title">
+    {{tomorrow}}
+  </view>
+  <view class="convert">
+    <view class="recog text1">自动</view>
+    <image src="../../image/convert.png" mode="aspectFit" class="convert-img" />
+    <view class="recog text2">识别</view>
+  </view>
+  <view wx:for="{{plan}}" class="item">
+    <view wx:if="{{item[1]==''}}" class="content-item">
+      {{item[0]}} {{item[2]}}
+    </view>
+    <view wx:else="" class="content-item">
+      {{item[0]}}-{{item[1]}} {{item[2]}}
+    </view>
+    <view class="modify-img-container">
+      <image src="../../image/modify.png" mode="aspectFit" class="modify-img" />
+    </view>
+  </view>
+  <view class="add-handy">
+    <view class="add-img-container">
+      <image src="../../image/add.png" mode="aspectFit" class="add-img" />
+    </view>
+    <view class="content-add">手动添加</view>
+  </view>
+</view>
