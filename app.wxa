@@ -11,7 +11,8 @@ export default {
       'pages/home/index',
       'pages/plan/plan',
       'pages/check/check',
-      'pages/past/past'
+      'pages/past/past',
+      'pages/recog/recog'
     ],
     // tabBar: {
     //     color: '#7a7e83',

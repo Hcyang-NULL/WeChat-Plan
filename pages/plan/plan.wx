@@ -4,9 +4,9 @@
             {{tomorrow}}
         </view>
         <view class="convert">
-            <view class="recog text1">自动</view>
-            <image src="../../image/convert.png" mode="aspectFit" class="convert-img">
-                <view class="recog text2">识别</view>
+            <view class="recog text1" bindtap="torecog">自动</view>
+            <image src="../../image/convert.png" mode="aspectFit" class="convert-img" bindtap="torecog" />
+            <view class="recog text2" bindtap="torecog">识别</view>
         </view>
         <view wx:for="{{plan}}" class="item">
             <view wx:if="{{item[1]==''}}" class="content-item">
@@ -21,7 +21,7 @@
         </view>
         <view class="add-handy">
             <view class="add-img-container">
-                <image src="../../image/add.png" mode="aspectFit" class="add-img" >
+                <image src="../../image/add.png" mode="aspectFit" class="add-img">
             </view>
             <view class="content-add">手动添加</view>
         </view>
@@ -47,6 +47,11 @@
             this.setData({
                 tomorrow: options.tomorrow
             })
+        },
+        torecog() {
+            wx.navigateTo({
+                url: '../recog/recog',
+            });
         }
     }
 </script>
@@ -107,7 +112,7 @@
         text-align: left;
     }
 
-    .item{
+    .item {
         width: 90%;
         margin-left: 5%;
         height: 60rpx;
@@ -129,7 +134,7 @@
         padding-left: 4%;
     }
 
-    .modify-img-container{
+    .modify-img-container {
         height: 50rpx;
         float: left;
         width: 10%;
@@ -138,7 +143,7 @@
         // border: solid 1rpx;
     }
 
-    .add-handy{
+    .add-handy {
         width: 30%;
         border: solid 3rpx #EBEBEB;
         border-radius: 10rpx;
@@ -148,7 +153,7 @@
         margin-left: 35%;
     }
 
-    .add-img-container{
+    .add-img-container {
         float: left;
         margin-left: 15%;
         height: 30rpx;
@@ -156,7 +161,7 @@
         width: 30rpx;
     }
 
-    .content-add{
+    .content-add {
         float: left;
         margin-left: 5%;
         text-align: left;
@@ -166,5 +171,4 @@
         margin-top: 5rpx;
         font-size: 95%
     }
-
 </style>

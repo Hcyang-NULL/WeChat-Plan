@@ -3,9 +3,9 @@
     {{tomorrow}}
   </view>
   <view class="convert">
-    <view class="recog text1">自动</view>
-    <image src="../../image/convert.png" mode="aspectFit" class="convert-img" />
-    <view class="recog text2">识别</view>
+    <view class="recog text1" bindtap="torecog">自动</view>
+    <image src="../../image/convert.png" mode="aspectFit" class="convert-img" bindtap="torecog" />
+    <view class="recog text2" bindtap="torecog">识别</view>
   </view>
   <view wx:for="{{plan}}" class="item">
     <view wx:if="{{item[1]==''}}" class="content-item">

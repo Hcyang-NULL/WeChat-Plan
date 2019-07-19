@@ -14,5 +14,10 @@ exports.default = Page({
         this.setData({
             tomorrow: options.tomorrow
         });
+    },
+    torecog: function torecog() {
+        wx.navigateTo({
+            url: '../recog/recog'
+        });
     }
 });

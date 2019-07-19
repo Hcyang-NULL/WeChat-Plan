@@ -1,0 +1,15 @@
+<view class="root">
+  <view class="example">
+    说明：输入对完整计划的描述性文字，将会自动为小杨生成对应计划表，但请尽量参照以下规则：时间需写为"xx:xx"或"xx点xx分"且为阿拉伯数字或常用表达如"8点半""下午3点半""晚上9点整"，若计划事件存在起始与终止时间请使用短横线"-"或者汉字"到"标识，两个事件之间使用标点符号分隔如","或";"等
+  </view>
+  <view>
+    <textarea class="input" placeholder="{{example}}">
+
+        </textarea></view>
+  <view class="btn">
+    <view class="analysis-img-container">
+      <image src="../../image/analysis.png" mode="aspectFit" class="analysis-img" />
+    </view>
+    <view class="content">开始分析</view>
+  </view>
+</view>
