@@ -5,9 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 var app = getApp();
 var input_text = '6:40起床，7:10-7:30早餐；8点半开始学习(测试)。12点20分到下午2点整午休，晚上11点半睡觉。';
+var tomorrow = '';
 exports.default = Page({
     data: {
         example: "6:40起床，7:10-7:30早餐；8点半开始学习。12点20分到下午2点整午休，晚上11点半睡觉。"
+    },
+    onLoad: function onLoad(options) {
+        tomorrow = options.tomorrow;
     },
     analysis: function analysis() {
         var that = this;
@@ -27,7 +31,8 @@ exports.default = Page({
             wx.request({
                 url: app.globalData.server + '/analysis',
                 data: {
-                    'text': input_text
+                    'text': input_text,
+                    'date': tomorrow
                 },
                 header: { 'content-type': 'application/json' },
                 method: 'POST',

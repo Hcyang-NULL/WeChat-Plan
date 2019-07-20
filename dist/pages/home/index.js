@@ -12,7 +12,6 @@ exports.default = Page({
     data: {
         cweek: "",
         cdate: "",
-        ctime: "",
         now_mission: "无安排"
     },
     plan: function plan() {
@@ -43,31 +42,62 @@ exports.default = Page({
         } else {
             tomorrow = days[day] + " " + months[month - 1];
         }
+
+        var plan = [];
+        var that = this;
         var hour = date.getHours();
-        var ctime = "";
-        if (hour < 4) {
-            ctime = "深夜";
-        } else if (hour < 7) {
-            ctime = "清晨";
-        } else if (hour < 12) {
-            ctime = "早上好";
-        } else if (hour < 14) {
-            ctime = "午后";
-        } else if (hour < 19) {
-            ctime = "下午好";
-        } else if (hour < 20) {
-            ctime = "傍晚";
-        } else if (hour < 23) {
-            ctime = "晚上好";
-        } else {
-            ctime = "深夜";
-        }
-        console.log(hour);
+        var minute = date.getMinutes();
+        wx.request({
+            url: app.globalData.server + '/tomorrow',
+            data: {
+                'date': tomorrow
+            },
+            header: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            success: function success(result) {
+                console.log(result);
+                plan = result.data.plan;
+                app.globalData.plan = result.data.plan;
+
+                if (plan == []) {
+                    that.setData({
+                        now_mission: '未计划'
+                    });
+                } else {
+                    var find = '';
+                    for (var i = 0; i < plan.length; i++) {
+                        var now = plan[i];
+                        if (hour >= now[0] && now[4] != '' && hour <= now[4]) {
+                            if (hour == now[0] && minute >= now[2]) {
+                                find = now[8];
+                                break;
+                            } else if (hour == now[4] && minute <= now[6]) {
+                                find = now[8];
+                                break;
+                            } else if (hour != now[0] && hour != now[4]) {
+                                find = now[8];
+                                break;
+                            }
+                        }
+                    }
+                    if (find == '') {
+                        find = '暂无计划事件';
+                    }
+                    that.setData({
+                        now_mission: find
+                    });
+                }
+            },
+            fail: function fail() {},
+            complete: function complete() {}
+        });
 
         this.setData({
             cweek: weeks[week - 1],
-            cdate: cdate,
-            ctime: ctime
+            cdate: cdate
         });
     }
 });

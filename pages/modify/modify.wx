@@ -33,8 +33,17 @@
                     <view class="smin">
                         {{emin}}
                     </view>
-                    <ui-slider width="{{width-50}}" min="0" max="55" step="5" show-value value='{{data_emin}}'
+                    <ui-slider width="{{width-50}}" min="0" max="60" step="5" show-value value='{{data_emin}}'
                         thumb-style="{{ tbObj1 }}" bindchange='eminchange'></ui-slider>
+                </view>
+                <view class="noetime">
+                    无终止时间
+                </view>
+                <view class="switcher" hidden="{{noend}}" >
+                    <switch bindchange="switchChange" />
+                </view>
+                <view class="switcher" hidden="{{!noend}}" >
+                    <switch checked bindchange="switchChange" />
                 </view>
             </swiper-item>
             <swiper-item>
@@ -51,10 +60,14 @@
         <view class="footer" bindtap='finish'>
             完成
         </view>
+        <view class="delete" bindtap='delete'>
+            删除
+        </view>
     </view>
 </template>
 
 <script>
+    const app = getApp()
     let id;
     let shour;
     let smin;
@@ -62,6 +75,18 @@
     let emin;
     let event;
     let detail;
+    let noend = false;
+    let tomorrow;
+    function trans_min(a) {  
+        if(a < 10)
+        {
+            return '0'+a
+        }
+        else
+        {
+            return a
+        }
+    }
     export default {
         config: {
             navigationBarTitleText: '修订计划'
@@ -98,7 +123,11 @@
             emin: '30分',
             data_emin: 0,
             data_event: '',
-            data_detail: ''
+            data_detail: '',
+            noend: false
+        },
+        switchChange(e) {
+            noend = e.detail.value
         },
         shourchange(e) {
             shour = e.detail.value;
@@ -160,11 +189,12 @@
             console.log(options)
             id = options.id;
             shour = options.shour;
-            smin = options.smin;
+            smin = parseInt(options.smin);
             ehour = options.ehour;
-            emin = options.emin;
+            emin = parseInt(options.emin);
             event = options.event;
             detail = options.detail;
+            tomorrow = options.tomorrow
             if(ehour != "")
             {
                 this.setData({
@@ -173,7 +203,8 @@
                     data_ehour: ehour,
                     data_emin: emin,
                     data_event: event,
-                    data_detail: detail
+                    data_detail: detail,
+                    noend: false
                 })
                 let e = {}
                 e['detail'] = {}
@@ -181,6 +212,7 @@
                 this.ehourchange(e)
                 e['detail']['value'] = emin
                 this.eminchange(e)
+                noend = false
             }
             else
             {
@@ -188,8 +220,10 @@
                     data_shour: shour,
                     data_smin: smin,
                     data_event: event,
-                    data_detail: detail
+                    data_detail: detail,
+                    noend: true
                 })
+                noend = true
             }
             let e = {}
             e['detail'] = {}
@@ -208,7 +242,72 @@
             console.log(e)
         },
         finish() {
-            
+            let modify = [];
+            modify.push(shour)
+            modify.push(':')
+            modify.push(trans_min(smin))
+            if(!noend)
+            {
+                modify.push('-')
+                modify.push(ehour)
+                modify.push(':')
+                modify.push(trans_min(emin))
+            }
+            else
+            {
+                for(let i = 0; i < 4; i++)
+                {
+                    modify.push('')
+                }
+            }
+            modify.push(' ')
+            modify.push(event)
+            modify.push(detail)
+            if(id >= app.globalData.plan.length)
+            {
+                app.globalData.plan.push(modify)
+            }
+            else
+            {
+                app.globalData.plan[id] = modify
+            }
+            console.log(app.globalData.plan)
+            console.log(modify)
+            wx.request({
+                url: app.globalData.server+'/store',
+                data: {
+                    'date': tomorrow,
+                    'plan': app.globalData.plan
+                },
+                header: {'content-type':'application/json'},
+                method: 'POST',
+                dataType: 'json',
+                success: (result)=>{
+                    console.log(result)
+                }
+            });
+            wx.navigateBack({
+                delta: 1
+            });
+        },
+        delete() {
+            app.globalData.plan.splice(id, 1)
+            wx.request({
+                url: app.globalData.server+'/store',
+                data: {
+                    'date': tomorrow,
+                    'plan': app.globalData.plan
+                },
+                header: {'content-type':'application/json'},
+                method: 'POST',
+                dataType: 'json',
+                success: (result)=>{
+                    console.log(result)
+                }
+            });
+            wx.navigateBack({
+                delta: 1
+            });
         }
     }
 </script>
@@ -268,6 +367,18 @@
         background-color: rgb(192, 232, 248);
     }
 
+    .delete{
+        position: fixed;
+        bottom: 80rpx;
+        height: 80rpx;
+        border-top: solid 1rpx #EBEBEB;
+        border-radius: 10rpx;
+        text-align: center;
+        line-height: 80rpx;
+        width: 100%;
+        background-color: rgb(255, 190, 190);
+    }
+
     .input{
         width: 90%;
         margin-left: 5%;
@@ -280,6 +391,20 @@
         box-shadow: 5rpx 5rpx 2rpx rgba(0, 0, 0, .2);
         height: 300rpx;
         text-align: center;
+    }
+
+    .noetime{
+        width: 100%;
+        text-align: center;
+        font-size: 90%;
+        margin-top: 10%;
+        height: 60rpx;
+    }
+
+    .switcher{
+        width: 16%;
+        margin-left: 42%;
+        align-items: center;
     }
 
 </style>

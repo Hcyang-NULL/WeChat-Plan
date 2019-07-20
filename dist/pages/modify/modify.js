@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var app = getApp();
 var id = void 0;
 var shour = void 0;
 var smin = void 0;
@@ -10,6 +11,15 @@ var ehour = void 0;
 var emin = void 0;
 var event = void 0;
 var detail = void 0;
+var noend = false;
+var tomorrow = void 0;
+function trans_min(a) {
+    if (a < 10) {
+        return '0' + a;
+    } else {
+        return a;
+    }
+}
 exports.default = Page({
     data: {
         current2: 0,
@@ -43,7 +53,11 @@ exports.default = Page({
         emin: '30分',
         data_emin: 0,
         data_event: '',
-        data_detail: ''
+        data_detail: '',
+        noend: false
+    },
+    switchChange: function switchChange(e) {
+        noend = e.detail.value;
     },
     shourchange: function shourchange(e) {
         shour = e.detail.value;
@@ -99,11 +113,12 @@ exports.default = Page({
         console.log(options);
         id = options.id;
         shour = options.shour;
-        smin = options.smin;
+        smin = parseInt(options.smin);
         ehour = options.ehour;
-        emin = options.emin;
+        emin = parseInt(options.emin);
         event = options.event;
         detail = options.detail;
+        tomorrow = options.tomorrow;
         if (ehour != "") {
             this.setData({
                 data_shour: shour,
@@ -111,7 +126,8 @@ exports.default = Page({
                 data_ehour: ehour,
                 data_emin: emin,
                 data_event: event,
-                data_detail: detail
+                data_detail: detail,
+                noend: false
             });
             var _e = {};
             _e['detail'] = {};
@@ -119,13 +135,16 @@ exports.default = Page({
             this.ehourchange(_e);
             _e['detail']['value'] = emin;
             this.eminchange(_e);
+            noend = false;
         } else {
             this.setData({
                 data_shour: shour,
                 data_smin: smin,
                 data_event: event,
-                data_detail: detail
+                data_detail: detail,
+                noend: true
             });
+            noend = true;
         }
         var e = {};
         e['detail'] = {};
@@ -143,5 +162,65 @@ exports.default = Page({
         detail = e.detail.value;
         console.log(e);
     },
-    finish: function finish() {}
+    finish: function finish() {
+        var modify = [];
+        modify.push(shour);
+        modify.push(':');
+        modify.push(trans_min(smin));
+        if (!noend) {
+            modify.push('-');
+            modify.push(ehour);
+            modify.push(':');
+            modify.push(trans_min(emin));
+        } else {
+            for (var i = 0; i < 4; i++) {
+                modify.push('');
+            }
+        }
+        modify.push(' ');
+        modify.push(event);
+        modify.push(detail);
+        if (id >= app.globalData.plan.length) {
+            app.globalData.plan.push(modify);
+        } else {
+            app.globalData.plan[id] = modify;
+        }
+        console.log(app.globalData.plan);
+        console.log(modify);
+        wx.request({
+            url: app.globalData.server + '/store',
+            data: {
+                'date': tomorrow,
+                'plan': app.globalData.plan
+            },
+            header: { 'content-type': 'application/json' },
+            method: 'POST',
+            dataType: 'json',
+            success: function success(result) {
+                console.log(result);
+            }
+        });
+        wx.navigateBack({
+            delta: 1
+        });
+    },
+    delete: function _delete() {
+        app.globalData.plan.splice(id, 1);
+        wx.request({
+            url: app.globalData.server + '/store',
+            data: {
+                'date': tomorrow,
+                'plan': app.globalData.plan
+            },
+            header: { 'content-type': 'application/json' },
+            method: 'POST',
+            dataType: 'json',
+            success: function success(result) {
+                console.log(result);
+            }
+        });
+        wx.navigateBack({
+            delta: 1
+        });
+    }
 });

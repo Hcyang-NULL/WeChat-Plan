@@ -11,8 +11,20 @@ async def analysisHandler(request):
     try:
         data = await request.json()
         text = data['text']
+        date = data['date']
 
         res = analysis(text)
+
+        with open(('./plans/%s.txt')%(date), 'w', encoding='utf-8') as f:
+            for now in res:
+                for i in range(len(now)):
+                    if now[i] == '':
+                        f.write('$$ ')
+                    elif now[i] == ' ':
+                        f.write('## ')
+                    else:
+                        f.write(now[i]+' ')
+                f.write('\n')
 
         response_dict = {}
         response_dict['plan'] = res
@@ -72,11 +84,70 @@ async def helloHandler(request):
     print('hello')
     return web.Response(text="Hello, world")
 
+async def tomorrowHandler(request):
+    try:
+        data = await request.json()
+        date = data['date']
+        response_dict = {}
+
+        if not os.path.isfile(('./plans/%s.txt')%(date)):
+            response_dict['code'] = 904
+            response_dict['plan'] = []
+            return web.json_response(response_dict)
+        
+        result = []
+        with open(('./plans/%s.txt')%(date), 'r', encoding='utf-8') as f:
+            for line in f.readlines():
+                temp = line.split(' ')
+                temp = temp[:-1]
+                for i in range(len(temp)):
+                    if temp[i] == '$$':
+                        temp[i] = ''
+                    elif temp[i] == '##':
+                        temp[i] = ' '
+                result.append(temp)
+        response_dict['plan'] = result
+        response_dict['code'] = 200
+
+        return web.json_response(response_dict)
+
+    except Exception as e:
+        print(e)
+        response_dict['code'] = 500
+        return web.json_response(response_dict)
+
+async def storeHandler(request):
+    try:
+        data = await request.json()
+        plan = data['plan']
+        date = data['date']
+        response_dict = {}
+
+        with open(('./plans/%s.txt')%(date), 'w', encoding='utf-8') as f:
+            for now in plan:
+                print(now)
+                for i in range(len(now)):
+                    if now[i] == '':
+                        f.write('$$ ')
+                    elif now[i] == ' ':
+                        f.write('## ')
+                    else:
+                        f.write(str(now[i])+' ')
+                f.write('\n')
+
+        response_dict['code'] = 200
+        
+        return web.json_response(response_dict)
+
+    except Exception as e:
+        print(e)
 
 def init(app):
     app.router.add_get('/', helloHandler)
     app.router.add_post('/request_openid', GetOpenidHandler)
     app.router.add_post('/analysis', analysisHandler)
+    app.router.add_post('/tomorrow', tomorrowHandler)
+    app.router.add_post('/store', storeHandler)
 
 if __name__ == "__main__":
     app = web.Application()

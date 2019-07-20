@@ -20,7 +20,7 @@
       </view>
     </view>
   </view>
-  <view class="add-handy">
+  <view class="add-handy" bindtap="addhandy">
     <view class="add-img-container">
       <image src="../../image/add.png" mode="aspectFit" class="add-img" />
     </view>

@@ -28,7 +28,18 @@
         <view class="smin">
           {{emin}}
         </view>
-        <ui-slider width="{{width-50}}" min="0" max="55" step="5" show-value value="{{data_emin}}" thumb-style="{{ tbObj1 }}" bindchange="eminchange" _pid="{{_pid}}"></ui-slider>
+        <ui-slider width="{{width-50}}" min="0" max="60" step="5" show-value value="{{data_emin}}" thumb-style="{{ tbObj1 }}" bindchange="eminchange" _pid="{{_pid}}"></ui-slider>
+      </view>
+      <view class="noetime">
+        无终止时间
+      </view>
+      <view class="switcher" hidden="{{noend}}">
+        <switch bindchange="switchChange" color="#39f">
+        </switch>
+      </view>
+      <view class="switcher" hidden="{{!noend}}">
+        <switch checked bindchange="switchChange" color="#39f">
+        </switch>
       </view>
     </swiper-item>
     <swiper-item>
@@ -46,5 +57,8 @@
   </swiper>
   <view class="footer" bindtap="finish">
     完成
+  </view>
+  <view class="delete" bindtap="delete">
+    删除
   </view>
 </view>

@@ -6,9 +6,6 @@
         <view class="date">
             {{cdate}}
         </view>
-        <!-- <view class="time">
-            {{ctime}}
-        </view> -->
         <view class="mission">
             <view class="title-mission">
                 当前任务
@@ -61,14 +58,13 @@
         data: {
             cweek: "",
             cdate: "",
-            ctime: "",
             now_mission: "无安排"
         },
         plan() {
             console.log("plan tomorrow")
             const that = this;
             wx.navigateTo({
-                url: '../plan/plan?tomorrow='+tomorrow,
+                url: '../plan/plan?tomorrow=' + tomorrow,
             });
         },
         check() {
@@ -86,57 +82,70 @@
             let week = date.getDay();
             let month = date.getMonth();
             let day = date.getDate();
-            let cdate = days[day-1]+" "+months[month-1]
-            if(day == 31)
-            {
-                tomorrow = days[0]+" "+months[month]
+            let cdate = days[day - 1] + " " + months[month - 1]
+            if (day == 31) {
+                tomorrow = days[0] + " " + months[month]
+            } else {
+                tomorrow = days[day] + " " + months[month - 1]
             }
-            else
-            {
-                tomorrow = days[day]+" "+months[month-1]
-            }
+
+            let plan = [];
+            const that = this;
             let hour = date.getHours();
-            let ctime = ""
-            if(hour < 4)
-            {
-                ctime = "深夜";
-            }
-            else if(hour < 7)
-            {
-                ctime = "清晨";
-            }
-            else if(hour < 12)
-            {
-                ctime = "早上好";
-            }
-            else if(hour < 14)
-            {
-                ctime = "午后";
-            }
-            else if(hour < 19)
-            {
-                ctime = "下午好";
-            }
-            else if(hour < 20)
-            {
-                ctime = "傍晚";
-            }
-            else if(hour < 23)
-            {
-                ctime = "晚上好";
-            }
-            else
-            {
-                ctime = "深夜";
-            }
-            console.log(hour)
+            let minute = date.getMinutes();
+            wx.request({
+                url: app.globalData.server + '/tomorrow',
+                data: {
+                    'date': tomorrow
+                },
+                header: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                dataType: 'json',
+                success: (result) => {
+                    console.log(result)
+                    plan = result.data.plan;
+                    app.globalData.plan = result.data.plan;
+
+                    if (plan == []) {
+                        that.setData({
+                            now_mission: '未计划'
+                        })
+                    } else {
+                        let find = ''
+                        for (let i = 0; i < plan.length; i++) {
+                            let now = plan[i];
+                            if (hour >= now[0] && now[4] != '' && hour <= now[4]) {
+                                if (hour == now[0] && minute >= now[2]) {
+                                    find = now[8];
+                                    break;
+                                } else if (hour == now[4] && minute <= now[6]) {
+                                    find = now[8];
+                                    break;
+                                } else if (hour != now[0] && hour != now[4]) {
+                                    find = now[8];
+                                    break;
+                                }
+                            }
+                        }
+                        if (find == '') {
+                            find = '暂无计划事件'
+                        }
+                        that.setData({
+                            now_mission: find
+                        })
+                    }
+                },
+                fail: () => {},
+                complete: () => {}
+            });
 
 
 
             this.setData({
-                cweek: weeks[week-1],
-                cdate: cdate,
-                ctime: ctime
+                cweek: weeks[week - 1],
+                cdate: cdate
             })
         }
     }
@@ -145,13 +154,13 @@
 <style lang="less">
     @import '../../style/DeliciousMocha.wxss';
 
-    .root{
+    .root {
         border-top: solid 2rpx #EBEBEB;
         height: 100%;
         background-color: #F5F5F5
     }
 
-    .week{
+    .week {
         width: 100%;
         height: 15%;
         font-family: DeliciousMocha;
@@ -161,7 +170,7 @@
         // border: solid 1rpx;
     }
 
-    .date{
+    .date {
         width: 100%;
         height: 8%;
         font-family: DeliciousMocha;
@@ -171,7 +180,7 @@
         // border: solid 1rpx;
     }
 
-    .time{
+    .time {
         width: 100%;
         height: 8%;
         font-size: 120%;
@@ -180,18 +189,18 @@
         // border: solid 1rpx;
     }
 
-    .mission{
+    .mission {
         width: 100%;
         text-align: center;
         margin-top: 10%;
     }
 
-    .title-mission{
+    .title-mission {
         font-size: 120%;
         margin-bottom: 3%;
     }
 
-    .content-mission{
+    .content-mission {
         width: 80%;
         padding-top: 10rpx;
         padding-bottom: 10rpx;
@@ -202,12 +211,12 @@
         box-shadow: 4rpx 4rpx 2rpx rgba(0, 0, 0, .2);
     }
 
-    .btn-container{
+    .btn-container {
         width: 100%;
         margin-top: 30%;
     }
 
-    .btn{
+    .btn {
         margin-bottom: 5%;
         width: 60%;
         margin-left: 20%;
@@ -220,16 +229,15 @@
         font-size: 90%;
     }
 
-    .make-plan{
+    .make-plan {
         background-color: rgb(64, 129, 237)
     }
 
-    .check-plan{
+    .check-plan {
         background-color: rgb(51, 163, 81)
     }
 
-    .plan-view{
+    .plan-view {
         background-color: rgb(228, 65, 52);
     }
-
 </style>

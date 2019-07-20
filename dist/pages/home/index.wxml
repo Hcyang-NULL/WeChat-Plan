@@ -5,9 +5,6 @@
   <view class="date">
     {{cdate}}
   </view>
-  <!-- <view class="time">
-            {{ctime}}
-        </view> -->
   <view class="mission">
     <view class="title-mission">
       当前任务

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8,14 +8,35 @@ var plan = [];
 exports.default = Page({
     data: {
         tomorrow: "",
-        plan: [["6:40 起床", ""], ["7:10-7:30 早餐", ""], ["8:30 开始学习", ""], ["12:20-14:00 午休", "（杨智茹小仙女）"], ["23:30 睡觉", ""]],
-        height: ['60', '60', '60', '110', '60']
+        plan: [],
+        height: []
     },
     onLoad: function onLoad(options) {
         console.log(options);
+        var that = this;
         this.setData({
             tomorrow: options.tomorrow
         });
+        this.convert();
+        // wx.request({
+        //     url: app.globalData.server + '/tomorrow',
+        //     data: {
+        //         'date': options.tomorrow
+        //     },
+        //     header: {
+        //         'content-type': 'application/json'
+        //     },
+        //     method: 'POST',
+        //     dataType: 'json',
+        //     success: (result) => {
+        //         console.log(result)
+        //         plan = result.data.plan;
+        //         app.globalData.plan = result.data.plan;
+        //         that.convert()
+        //     },
+        //     fail: () => {},
+        //     complete: () => {}
+        // });
     },
     convert: function convert() {
         var temp = [];
@@ -45,13 +66,13 @@ exports.default = Page({
     onShow: function onShow() {
         if (app.globalData.plan.length != 0) {
             plan = app.globalData.plan;
-            app.globalData.plan = [];
             this.convert();
         }
     },
     torecog: function torecog() {
+        var that = this;
         wx.navigateTo({
-            url: '../recog/recog'
+            url: '../recog/recog?tomorrow=' + that.data.tomorrow
         });
     },
     modify: function modify(e) {
@@ -65,9 +86,16 @@ exports.default = Page({
         var event = plan[id][8];
         var detail = plan[id][9];
         console.log(shour);
-        console.log('id=' + id + "&shour=" + shour + "&smin=" + smin + "&ehour=" + ehour + "&emin=" + emin + "&event=" + event + "&detail=" + detail);
+        console.log('tomorrow' + that.data.tomorrow + '&id=' + id + "&shour=" + shour + "&smin=" + smin + "&ehour=" + ehour + "&emin=" + emin + "&event=" + event + "&detail=" + detail);
         wx.navigateTo({
-            url: '../modify/modify?id=' + id + "&shour=" + shour + "&smin=" + smin + "&ehour=" + ehour + "&emin=" + emin + "&event=" + event + "&detail=" + detail
+            url: '../modify/modify?tomorrow=' + that.data.tomorrow + '&id=' + id + "&shour=" + shour + "&smin=" + smin + "&ehour=" + ehour + "&emin=" + emin + "&event=" + event + "&detail=" + detail
+        });
+    },
+    addhandy: function addhandy() {
+        var id = app.globalData.plan.length;
+        var that = this;
+        wx.navigateTo({
+            url: '../modify/modify?tomorrow=' + that.data.tomorrow + '&id=' + id + "&shour=12&smin=30&ehour=12&emin=30&event=&detail="
         });
     }
 });

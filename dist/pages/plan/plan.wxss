@@ -122,7 +122,6 @@
   float: left;
   margin-left: 5%;
   text-align: left;
-  color: #818181;
   height: 50rpx;
   line-height: 50rpx;
   margin-top: 5rpx;
