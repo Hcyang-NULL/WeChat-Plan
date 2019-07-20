@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var app = getApp();
-var input_text = '6:40起床，7:10-7:30早餐；8点半开始学习。12点20分到下午2点整午休，晚上11点半睡觉。';
+var input_text = '6:40起床，7:10-7:30早餐；8点半开始学习(测试)。12点20分到下午2点整午休，晚上11点半睡觉。';
 exports.default = Page({
     data: {
         example: "6:40起床，7:10-7:30早餐；8点半开始学习。12点20分到下午2点整午休，晚上11点半睡觉。"

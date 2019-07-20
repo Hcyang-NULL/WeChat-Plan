@@ -8,12 +8,17 @@
             <image src="../../image/convert.png" mode="aspectFit" class="convert-img" bindtap="torecog" />
             <view class="recog text2" bindtap="torecog">识别</view>
         </view>
-        <view wx:for="{{plan}}" class="item">
-            <view class="content-item">
-                {{item}}
-            </view>
-            <view class="modify-img-container">
-                <image src="../../image/modify.png" mode="aspectFit" class="modify-img">
+        <view wx:for="{{plan}}">
+            <view class="item" style="height:{{height[index]}}rpx">
+                <view class="content-item">
+                    {{item[0]}}
+                </view>
+                <view class="modify-img-container">
+                    <image src="../../image/modify.png" mode="aspectFit" class="modify-img" id="{{index}}" bindtap='modify'>
+                </view>
+                <view wx:if="{{item[1] != ''}}" class="detail">
+                    {{item[1]}}
+                </view>
             </view>
         </view>
         <view class="add-handy">
@@ -34,29 +39,71 @@
         },
         data: {
             tomorrow: "",
-            plan: []
+            plan: [
+                ["6:40 起床", ""],
+                ["7:10-7:30 早餐", ""],
+                ["8:30 开始学习", ""],
+                ["12:20-14:00 午休", "（杨智茹小仙女）"],
+                ["23:30 睡觉", ""]
+            ],
+            height: [
+                '60',
+                '60',
+                '60',
+                '110',
+                '60'
+            ]
         },
         onLoad(options) {
             console.log(options)
+            const that
             this.setData({
                 tomorrow: options.tomorrow
             })
+            wx.request({
+                url: app.globalData.server+'/toplan',
+                data: {
+                    'tomorrow': options.tomorrow
+                },
+                header: {'content-type':'application/json'},
+                method: 'POST',
+                dataType: 'json',
+                success: (result)=>{
+                    
+                },
+                fail: ()=>{},
+                complete: ()=>{}
+            });
         },
         convert() {
             let temp = []
+            let height = []
             for(let i = 0; i < plan.length; i++)
             {
                 let now = plan[i];
                 let p = ''
-                for(let j = 0; j < now.length; j++)
+                for(let j = 0; j < now.length-1; j++)
                 {
                     p += now[j]
                 }
-                temp.push(p)
+                let temp_now = []
+                temp_now.push(p)
+                temp_now.push(now[now.length-1])
+                temp.push(temp_now)
+                if(temp_now[1] == '')
+                {
+                    height.push('60');
+                }
+                else
+                {
+                    height.push('110');
+                }
             }
             this.setData({
+                height: height,
                 plan: temp
             })
+            console.log(this.data.height)
         },
         onShow(){
             if(app.globalData.plan.length != 0)
@@ -70,7 +117,23 @@
             wx.navigateTo({
                 url: '../recog/recog',
             });
-        }
+        },
+        modify(e) {
+            console.log(e)
+            const that = this;
+            let id = e.currentTarget.id;
+            let shour = plan[id][0];
+            let smin = plan[id][2];
+            let ehour = plan[id][4];
+            let emin = plan[id][6];
+            let event = plan[id][8];
+            let detail = plan[id][9];
+            console.log(shour)
+            console.log('id='+id+"&shour="+shour+"&smin="+smin+"&ehour="+ehour+"&emin="+emin+"&event="+event+"&detail="+detail)
+            wx.navigateTo({
+                url: '../modify/modify?id='+id+"&shour="+shour+"&smin="+smin+"&ehour="+ehour+"&emin="+emin+"&event="+event+"&detail="+detail,
+            });
+        },
     }
 </script>
 
@@ -133,7 +196,8 @@
     .item {
         width: 90%;
         margin-left: 5%;
-        height: 60rpx;
+        // height: 60rpx;
+        // min-height: 60rpx;
         margin-bottom: 4%;
     }
 
@@ -158,6 +222,7 @@
         width: 10%;
         margin-left: 5%;
         margin-top: 15rpx;
+        clear: right;
         // border: solid 1rpx;
     }
 
@@ -189,4 +254,15 @@
         margin-top: 5rpx;
         font-size: 95%
     }
+
+    .detail{
+        float: left;
+        font-size: 80%;
+        margin-left: 3%;
+        padding-top: 2%;
+        height: 50rpx;
+        margin-top: 5rpx;
+        clear: both;
+    }
+
 </style>

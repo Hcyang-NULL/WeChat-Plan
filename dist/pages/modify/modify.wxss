@@ -1,0 +1,79 @@
+/* 1像素解决方案 */
+/*
+ * 清除1px
+ */
+/*
+ * 清除浮动
+ */
+/*
+ * mobile
+ */
+/*
+ * 1px
+ */
+/*
+ * text
+ */
+/* 垂直居中 */
+/* 水平居中 */
+/* 水平垂直居中 */
+/* 超出部分出省略号 */
+/* 多行文本超出部分省略号 */
+.root {
+  height: 100%;
+  background-color: #F5F5F5;
+  border-top: solid 2rpx #EBEBEB;
+}
+ui-tabs {
+  background-color: #f5f5f5;
+  padding-bottom: 1px;
+}
+.content {
+  height: 100%;
+  line-height: 60px;
+  margin: 0 10px;
+}
+.sliderbox {
+  display: table;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+}
+.slider-dist-index--value {
+  margin-top: -45rpx;
+}
+.shour,
+.smin {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  height: 50rpx;
+  margin-bottom: 5%;
+}
+.stime {
+  margin-top: 30%;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  height: 80rpx;
+  border-top: solid 1rpx #EBEBEB;
+  border-radius: 10rpx;
+  text-align: center;
+  line-height: 80rpx;
+  width: 100%;
+  background-color: #c0e8f8;
+}
+.input {
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 40%;
+  border: solid 2rpx #EBEBEB;
+  padding-left: 2%;
+  padding-top: 2%;
+  background-color: white;
+  border-radius: 10rpx;
+  box-shadow: 5rpx 5rpx 2rpx rgba(0, 0, 0, 0.2);
+  height: 300rpx;
+  text-align: center;
+}

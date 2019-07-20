@@ -12,7 +12,8 @@
                 'pages/plan/plan',
                 'pages/check/check',
                 'pages/past/past',
-                'pages/recog/recog'
+                'pages/recog/recog',
+                'pages/modify/modify'
             ],
             window: {
                 backgroundTextStyle: 'dark',

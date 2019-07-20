@@ -1,0 +1,50 @@
+<view class="root">
+  <ui-tabs index="{{ current2 }}" bindchange="handleChange2" ink-bar="true" active-tab-style="{{activeTabStyle}}" ink-bar-style="{{inkBarStyle}}" _pid="{{_pid}}">
+    <ui-tab _pid="{{_pid}}">Start</ui-tab>
+    <ui-tab _pid="{{_pid}}">End</ui-tab>
+    <ui-tab _pid="{{_pid}}">Event</ui-tab>
+    <ui-tab _pid="{{_pid}}">Detail</ui-tab>
+  </ui-tabs>
+
+  <swiper class="content" current="{{ current2 }}" bindchange="handleContentChange2">
+    <swiper-item>
+      <view class="stime">
+        <view class="shour">
+          {{shour}}
+        </view>
+        <ui-slider width="{{width-50}}" min="0" max="23" step="1" show-value value="{{data_shour}}" thumb-style="{{ tbObj1 }}" bindchange="shourchange" _pid="{{_pid}}"></ui-slider>
+        <view class="smin">
+          {{smin}}
+        </view>
+        <ui-slider width="{{width-50}}" min="0" max="55" step="5" show-value value="{{data_smin}}" thumb-style="{{ tbObj1 }}" bindchange="sminchange" _pid="{{_pid}}"></ui-slider>
+      </view>
+    </swiper-item>
+    <swiper-item>
+      <view class="stime">
+        <view class="shour">
+          {{ehour}}
+        </view>
+        <ui-slider width="{{width-50}}" min="0" max="23" step="1" show-value value="{{data_ehour}}" thumb-style="{{ tbObj1 }}" bindchange="ehourchange" _pid="{{_pid}}"></ui-slider>
+        <view class="smin">
+          {{emin}}
+        </view>
+        <ui-slider width="{{width-50}}" min="0" max="55" step="5" show-value value="{{data_emin}}" thumb-style="{{ tbObj1 }}" bindchange="eminchange" _pid="{{_pid}}"></ui-slider>
+      </view>
+    </swiper-item>
+    <swiper-item>
+      <view>
+        <textarea class="input" bindblur="blur1" value="{{data_event}}">
+
+                </textarea></view>
+    </swiper-item>
+    <swiper-item>
+      <view>
+        <textarea class="input" bindblur="blur2" value="{{data_detail}}">
+
+                </textarea></view>
+    </swiper-item>
+  </swiper>
+  <view class="footer" bindtap="finish">
+    完成
+  </view>
+</view>

@@ -7,12 +7,17 @@
     <image src="../../image/convert.png" mode="aspectFit" class="convert-img" bindtap="torecog" />
     <view class="recog text2" bindtap="torecog">识别</view>
   </view>
-  <view wx:for="{{plan}}" class="item">
-    <view class="content-item">
-      {{item}}
-    </view>
-    <view class="modify-img-container">
-      <image src="../../image/modify.png" mode="aspectFit" class="modify-img" />
+  <view wx:for="{{plan}}">
+    <view class="item" style="height:{{height[index]}}rpx">
+      <view class="content-item">
+        {{item[0]}}
+      </view>
+      <view class="modify-img-container">
+        <image src="../../image/modify.png" mode="aspectFit" class="modify-img" id="{{index}}" bindtap="modify" />
+      </view>
+      <view wx:if="{{item[1] != ''}}" class="detail">
+        {{item[1]}}
+      </view>
     </view>
   </view>
   <view class="add-handy">
