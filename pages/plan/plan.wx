@@ -9,11 +9,8 @@
             <view class="recog text2" bindtap="torecog">识别</view>
         </view>
         <view wx:for="{{plan}}" class="item">
-            <view wx:if="{{item[1]==''}}" class="content-item">
-                {{item[0]}} {{item[2]}}
-            </view>
-            <view wx:else class="content-item">
-                {{item[0]}}-{{item[1]}} {{item[2]}}
+            <view class="content-item">
+                {{item}}
             </view>
             <view class="modify-img-container">
                 <image src="../../image/modify.png" mode="aspectFit" class="modify-img">
@@ -29,6 +26,7 @@
 </template>
 
 <script>
+    const app = getApp()
     let plan = []
     export default {
         config: {
@@ -36,17 +34,37 @@
         },
         data: {
             tomorrow: "",
-            plan: [
-                ["6:40", "", "起床", ""],
-                ["7:10", "7:30", "吃早餐", ""],
-                ["10:00", "11:30", "英语真题", "30min逻辑+1h视频test"]
-            ]
+            plan: []
         },
         onLoad(options) {
             console.log(options)
             this.setData({
                 tomorrow: options.tomorrow
             })
+        },
+        convert() {
+            let temp = []
+            for(let i = 0; i < plan.length; i++)
+            {
+                let now = plan[i];
+                let p = ''
+                for(let j = 0; j < now.length; j++)
+                {
+                    p += now[j]
+                }
+                temp.push(p)
+            }
+            this.setData({
+                plan: temp
+            })
+        },
+        onShow(){
+            if(app.globalData.plan.length != 0)
+            {
+                plan = app.globalData.plan;
+                app.globalData.plan = []
+                this.convert()
+            }
         },
         torecog() {
             wx.navigateTo({

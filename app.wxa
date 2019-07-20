@@ -29,7 +29,8 @@
             }
         },
         globalData: {
-            server: 'https://www.hcy-null.top'
+            server: 'http://127.0.0.1:19552',
+            plan: []
         },
         onLaunch() {
             system.attachInfo()

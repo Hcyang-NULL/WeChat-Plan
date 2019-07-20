@@ -8,11 +8,8 @@
     <view class="recog text2" bindtap="torecog">识别</view>
   </view>
   <view wx:for="{{plan}}" class="item">
-    <view wx:if="{{item[1]==''}}" class="content-item">
-      {{item[0]}} {{item[2]}}
-    </view>
-    <view wx:else="" class="content-item">
-      {{item[0]}}-{{item[1]}} {{item[2]}}
+    <view class="content-item">
+      {{item}}
     </view>
     <view class="modify-img-container">
       <image src="../../image/modify.png" mode="aspectFit" class="modify-img" />

@@ -14,9 +14,13 @@ async def analysisHandler(request):
 
         res = analysis(text)
 
+        response_dict = {}
+        response_dict['plan'] = res
+
+        return web.json_response(response_dict)
 
     except Exception as e:
-        pass
+        print(e)
 
 async def GetOpenidHandler(request):
     try:

@@ -4,18 +4,20 @@
             说明：输入对完整计划的描述性文字，将会自动为小杨生成对应计划表，但请尽量参照以下规则：时间需写为"xx:xx"或"xx点xx分"且为阿拉伯数字或常用表达如"8点半""下午3点半""晚上9点整"，若计划事件存在起始与终止时间请使用短横线"-"或者汉字"到"标识，两个事件之间使用标点符号分隔如","或";"等
         </view>
         <view>
-            <textarea class="input" placeholder="{{example}}">
+            <textarea class="input" placeholder="{{example}}" bindblur='blur'>
         </view>
         <view class="btn">
             <view class="analysis-img-container">
-                <image src="../../image/analysis.png" mode="aspectFit" class="analysis-img" />
+                <image src="../../image/analysis.png" mode="aspectFit" class="analysis-img" bindtap='analysis' />
             </view>
-            <view class="content">开始分析</view>
+            <view class="content" bindtap='analysis' >开始分析</view>
         </view>
     </view>
 </template>
 
 <script>
+    const app = getApp()
+    let input_text = '6:40起床，7:10-7:30早餐；8点半开始学习。12点20分到下午2点整午休，晚上11点半睡觉。'
     export default {
         config: {
             navigationBarTitleText: '自动识别'
@@ -23,7 +25,56 @@
         data: {
             example: "6:40起床，7:10-7:30早餐；8点半开始学习。12点20分到下午2点整午休，晚上11点半睡觉。"
         },
-
+        analysis() {
+            const that = this;
+            if(input_text == '')
+            {
+                wx.showToast({
+                    title: '无计划描述',
+                    icon: 'none',
+                    duration: 1500,
+                    mask: true,
+                });
+                return;
+            }
+            else
+            {
+                wx.showLoading({
+                    title: '分析中..',
+                    mask: true,
+                });
+                wx.request({
+                    url: app.globalData.server+'/analysis',
+                    data: {
+                        'text': input_text
+                    },
+                    header: {'content-type':'application/json'},
+                    method: 'POST',
+                    dataType: 'json',
+                    success: (result)=>{
+                        app.globalData.plan = result.data.plan
+                        wx.hideLoading();
+                        wx.showToast({
+                            title: '分析成功',
+                            icon: 'success',
+                            duration: 1500,
+                            mask: true,
+                        });
+                        setTimeout(() => {
+                            wx.navigateBack({
+                                    delta: 1
+                                });
+                        }, 1500);
+                    },
+                    fail: ()=>{},
+                    complete: ()=>{}
+                });
+            }
+        },
+        blur(e) {
+            console.log(e)
+            input_text = e.detail.value
+        }
     }
 </script>
 
