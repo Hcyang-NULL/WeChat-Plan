@@ -13,7 +13,9 @@
                 'pages/check/check',
                 'pages/past/past',
                 'pages/recog/recog',
-                'pages/modify/modify'
+                'pages/modify/modify',
+                'pages/details/details',
+                'pages/today/today'
             ],
             window: {
                 backgroundTextStyle: 'dark',
@@ -30,8 +32,9 @@
             }
         },
         globalData: {
-            server: 'http://127.0.0.1:19552',
-            plan: []
+            server: 'http://47.95.113.33',
+            plan: [],
+            today: []
         },
         onLaunch() {
             system.attachInfo()

@@ -23,7 +23,8 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.6.6",
 	"appid": "wxd72d0c87339be2c9",
-	"projectname": "miniprogram-test-1",
+	"projectname": "dist",
+	"cloudfunctionTemplateRoot": "",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
@@ -47,34 +48,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 5,
+			"current": 0,
 			"list": [
 				{
-					"id": -1,
-					"name": "写信",
-					"pathName": "pages/message/message",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "收信",
-					"pathName": "pages/recive/recive",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "孙女",
-					"pathName": "pages/yzr/yzr",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
+					"id": 0,
 					"name": "Plan Tomorrow",
 					"pathName": "pages/plan/plan",
-					"query": "tomorrow=20th Jun",
+					"query": "",
 					"scene": null
 				},
 				{
@@ -89,6 +69,13 @@
 					"name": "修订计划",
 					"pathName": "pages/modify/modify",
 					"query": "id=2&shour=8&smin=30&ehour=6&emin=25&event=开始学习&detail=(测试)",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "今日计划",
+					"pathName": "pages/today/today",
+					"query": "",
 					"scene": null
 				}
 			]

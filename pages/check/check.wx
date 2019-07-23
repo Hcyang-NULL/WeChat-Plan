@@ -1,15 +1,211 @@
 <template>
-  <view></view>
+    <view>
+        <ui-check-list label-position="left" options="{{ planList }}" value="{{ checklist }}" bindchange='change'>
+        </ui-check-list>
+        <view class="submit" bindtap='submit'>
+            提交
+        </view>
+        <view style="height:80rpx;"></view>
+    </view>
 </template>
 
 <script>
-export default {
-  config: {
-    navigationBarTitleText: ''
-  },
-  data: {}
-}
+    const app = getApp();
+    let today, past;
+    export default {
+        config: {
+            navigationBarTitleText: 'Self-Check'
+        },
+        data: {
+            planList: [],
+            checklist: []
+        },
+        onLoad(options) {
+            today = options.today;
+            past = options.past
+            const that = this;
+
+            if (past == 0) {
+                wx.request({
+                    url: app.globalData.server + '/istodaycheck',
+                    data: {
+                        'date': today
+                    },
+                    header: {
+                        'content-type': 'application/json'
+                    },
+                    method: 'POST',
+                    dataType: 'json',
+                    success: (result) => {
+                        if (result.data.code != 404) {
+                            wx.showToast({
+                                title: '今日已经提交',
+                                icon: 'none',
+                                duration: 1500,
+                                mask: true,
+                            });
+                            setTimeout(() => {
+                                wx.navigateBack({
+                                    delta: 1
+                                });
+                            }, 1500);
+                        } else {
+                            let plans = [];
+                            console.log(app.globalData.today)
+                            for (let i = 0; i < app.globalData.today.length; i++) {
+                                let now = app.globalData.today[i];
+                                let temp = '';
+                                for (let j = 0; j < 9; j++) {
+                                    temp += now[j];
+                                }
+                                plans.push(temp);
+                            }
+                            that.setData({
+                                planList: plans,
+                                checklist: []
+                            })
+                            if (plans.length == 0) {
+                                wx.showToast({
+                                    title: '今日无计划',
+                                    icon: 'none',
+                                    duration: 1500,
+                                    mask: true,
+                                });
+                                setTimeout(() => {
+                                    wx.navigateBack({
+                                        delta: 1
+                                    });
+                                }, 1500);
+                            }
+                        }
+                    },
+                    fail: () => {},
+                    complete: () => {}
+                });
+            } else {
+                wx.request({
+                    url: app.globalData.server + '/tomorrow',
+                    data: {
+                        'date': today
+                    },
+                    header: {
+                        'content-type': 'application/json'
+                    },
+                    method: 'POST',
+                    dataType: 'json',
+                    success: (result) => {
+                        console.log(result)
+                        let old_day = result.data.plan;
+                        let plans = [];
+                        console.log(old_day)
+                        for (let i = 0; i < old_day.length; i++) {
+                            let now = old_day[i];
+                            let temp = '';
+                            for (let j = 0; j < 9; j++) {
+                                temp += now[j];
+                            }
+                            plans.push(temp);
+                        }
+                        that.setData({
+                            planList: plans,
+                            checklist: []
+                        })
+                    },
+                    fail: () => {},
+                    complete: () => {}
+                });
+            }
+        },
+        change(e) {
+            this.setData({
+                checklist: e.detail.value
+            })
+        },
+        submit() {
+            const that = this;
+            wx.showModal({
+                title: '任务自检',
+                content: '仅一次提交机会',
+                showCancel: true,
+                cancelText: '取消',
+                cancelColor: '#000000',
+                confirmText: '提交',
+                confirmColor: '#3CC51F',
+                success: (result) => {
+                    if (result.confirm) {
+                        wx.showLoading({
+                            title: '提交中..',
+                            mask: true,
+                        });
+                        that.updata()
+                    }
+                },
+                fail: () => {},
+                complete: () => {}
+            });
+        },
+        updata() {
+            let checklist = this.data.checklist;
+            let planList = this.data.planList;
+            let result = []
+            for (let i = 0; i < planList.length; i++) {
+                if (checklist.indexOf(planList[i]) != -1) {
+                    result.push(i);
+                }
+            }
+            console.log(result)
+            wx.request({
+                url: app.globalData.server + '/todaycheck',
+                data: {
+                    'date': today,
+                    'situation': result,
+                    'total': planList.length
+                },
+                header: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                dataType: 'json',
+                success: (result) => {
+                    wx.hideLoading();
+                    wx.showToast({
+                        title: '提交成功',
+                        icon: 'success',
+                        duration: 1500,
+                        mask: true,
+                    });
+                    setTimeout(() => {
+                        wx.navigateBack({
+                            delta: 1
+                        });
+                    }, 1500);
+                },
+                fail: () => {},
+                complete: () => {}
+            });
+        }
+    }
 </script>
 
 <style lang="less">
+    .title {
+        width: 100%;
+        height: 60rpx;
+        text-align: center;
+        margin-bottom: 5%;
+        line-height: 60rpx;
+    }
+
+    .submit {
+        width: 90%;
+        margin-left: 5%;
+        height: 60rpx;
+        text-align: center;
+        margin-top: 10%;
+        background-color: rgb(192, 232, 248);
+        border-top: solid 1rpx #EBEBEB;
+        border-radius: 10rpx;
+        line-height: 60rpx;
+        // margin-bottom: 40rpx;
+    }
 </style>

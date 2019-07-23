@@ -5,7 +5,9 @@
     "pages/check/check",
     "pages/past/past",
     "pages/recog/recog",
-    "pages/modify/modify"
+    "pages/modify/modify",
+    "pages/details/details",
+    "pages/today/today"
   ],
   "window": {
     "backgroundTextStyle": "dark",

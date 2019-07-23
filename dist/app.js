@@ -12,8 +12,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = App({
     globalData: {
-        server: 'http://127.0.0.1:19552',
-        plan: []
+        server: 'http://47.95.113.33',
+        plan: [],
+        today: []
     },
     onLaunch: function onLaunch() {
         _system2.default.attachInfo();

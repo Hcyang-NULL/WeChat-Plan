@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var app = getApp();
 var plan = [];
+var tomorrow = void 0;
 exports.default = Page({
     data: {
         tomorrow: "",
@@ -12,35 +13,39 @@ exports.default = Page({
         height: []
     },
     onLoad: function onLoad(options) {
-        console.log(options);
-        var that = this;
+        console.log('onload');
+        // console.log('----------')
+        // console.log()
+        // console.log('----------')
+        tomorrow = options.tomorrow;
         this.setData({
-            tomorrow: options.tomorrow
+            tomorrow: tomorrow
         });
-        this.convert();
-        // wx.request({
-        //     url: app.globalData.server + '/tomorrow',
-        //     data: {
-        //         'date': options.tomorrow
-        //     },
-        //     header: {
-        //         'content-type': 'application/json'
-        //     },
-        //     method: 'POST',
-        //     dataType: 'json',
-        //     success: (result) => {
-        //         console.log(result)
-        //         plan = result.data.plan;
-        //         app.globalData.plan = result.data.plan;
-        //         that.convert()
-        //     },
-        //     fail: () => {},
-        //     complete: () => {}
-        // });
+        var that = this;
+        wx.request({
+            url: app.globalData.server + '/tomorrow',
+            data: {
+                'date': tomorrow
+            },
+            header: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            success: function success(result) {
+                console.log(result);
+                plan = result.data.plan;
+                app.globalData.plan = result.data.plan;
+                that.convert();
+            },
+            fail: function fail() {},
+            complete: function complete() {}
+        });
     },
     convert: function convert() {
         var temp = [];
         var height = [];
+        console.log('confirm convert');
         for (var i = 0; i < plan.length; i++) {
             var now = plan[i];
             var p = '';
@@ -57,6 +62,8 @@ exports.default = Page({
                 height.push('110');
             }
         }
+        console.log('convert');
+        console.log(temp);
         this.setData({
             height: height,
             plan: temp
@@ -64,10 +71,8 @@ exports.default = Page({
         console.log(this.data.height);
     },
     onShow: function onShow() {
-        if (app.globalData.plan.length != 0) {
-            plan = app.globalData.plan;
-            this.convert();
-        }
+        plan = app.globalData.plan;
+        this.convert();
     },
     torecog: function torecog() {
         var that = this;

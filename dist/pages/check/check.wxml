@@ -1,1 +1,8 @@
-<view></view>
+<view>
+  <ui-check-list label-position="left" options="{{ planList }}" value="{{ checklist }}" bindchange="change" _pid="{{_pid}}">
+  </ui-check-list>
+  <view class="submit" bindtap="submit">
+    提交
+  </view>
+  <view style="height:80rpx;"></view>
+</view>

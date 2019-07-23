@@ -18,6 +18,9 @@
             <view class="make-plan btn" bindtap="plan">
                 Plan Tomorrow
             </view>
+            <view class="view-today btn" bindtap="view_today">
+                View Today
+            </view>
             <view class="check-plan btn" bindtap="check">
                 Check Today
             </view>
@@ -68,8 +71,9 @@
             });
         },
         check() {
+            const that = this;
             wx.navigateTo({
-                url: '../check/check',
+                url: '../check/check?past=0&today='+that.data.cdate,
             });
         },
         past() {
@@ -77,26 +81,35 @@
                 url: '../past/past',
             });
         },
+        view_today() {
+            wx.navigateTo({
+                url: '../today/today',
+            });
+        },
         onLoad() {
+            wx.setEnableDebug({
+                enableDebug: true
+            });
             let date = new Date();
             let week = date.getDay();
             let month = date.getMonth();
             let day = date.getDate();
-            let cdate = days[day - 1] + " " + months[month - 1]
+            console.log(month)
+            let cdate = days[day - 1] + " " + months[month]
             if (day == 31) {
                 tomorrow = days[0] + " " + months[month]
             } else {
-                tomorrow = days[day] + " " + months[month - 1]
+                tomorrow = days[day] + " " + months[month]
             }
 
-            let plan = [];
+            let today = [];
             const that = this;
             let hour = date.getHours();
             let minute = date.getMinutes();
             wx.request({
                 url: app.globalData.server + '/tomorrow',
                 data: {
-                    'date': tomorrow
+                    'date': cdate
                 },
                 header: {
                     'content-type': 'application/json'
@@ -105,27 +118,38 @@
                 dataType: 'json',
                 success: (result) => {
                     console.log(result)
-                    plan = result.data.plan;
-                    app.globalData.plan = result.data.plan;
+                    today = result.data.plan;
+                    app.globalData.today = result.data.plan;
 
-                    if (plan == []) {
+                    if (today == []) {
                         that.setData({
                             now_mission: '未计划'
                         })
                     } else {
                         let find = ''
-                        for (let i = 0; i < plan.length; i++) {
-                            let now = plan[i];
+                        for (let i = 0; i < today.length; i++) {
+                            let now = today[i];
                             if (hour >= now[0] && now[4] != '' && hour <= now[4]) {
-                                if (hour == now[0] && minute >= now[2]) {
-                                    find = now[8];
-                                    break;
-                                } else if (hour == now[4] && minute <= now[6]) {
-                                    find = now[8];
-                                    break;
-                                } else if (hour != now[0] && hour != now[4]) {
-                                    find = now[8];
-                                    break;
+                                if (now[0] != now[4])
+                                {
+                                    if (hour == now[0] && minute >= now[2]) {
+                                        find = now[8];
+                                        break;
+                                    } else if (hour == now[4] && minute <= now[6]) {
+                                        find = now[8];
+                                        break;
+                                    } else if (hour != now[0] && hour != now[4]) {
+                                        find = now[8];
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (minute >= now[2] && minute <= now[6])
+                                    {
+                                        find = now[8];
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -142,9 +166,8 @@
             });
 
 
-
             this.setData({
-                cweek: weeks[week - 1],
+                cweek: weeks[week],
                 cdate: cdate
             })
         }
@@ -160,6 +183,10 @@
         background-color: #F5F5F5
     }
 
+    page{
+        background-color: #F5F5F5;
+    }
+
     .week {
         width: 100%;
         height: 15%;
@@ -167,7 +194,6 @@
         font-size: 300%;
         text-align: center;
         line-height: 300%;
-        // border: solid 1rpx;
     }
 
     .date {
@@ -176,8 +202,6 @@
         font-family: DeliciousMocha;
         font-size: 150%;
         text-align: center;
-
-        // border: solid 1rpx;
     }
 
     .time {
@@ -186,7 +210,6 @@
         font-size: 120%;
         text-align: center;
         margin-top: 10%;
-        // border: solid 1rpx;
     }
 
     .mission {
@@ -213,7 +236,7 @@
 
     .btn-container {
         width: 100%;
-        margin-top: 30%;
+        margin-top: 20%;
     }
 
     .btn {
@@ -233,8 +256,12 @@
         background-color: rgb(64, 129, 237)
     }
 
-    .check-plan {
+    .view-today{
         background-color: rgb(51, 163, 81)
+    }
+
+    .check-plan {
+        background-color: rgb(251, 188, 5)
     }
 
     .plan-view {

@@ -36,6 +36,9 @@
   background-color: #F5F5F5;
   border-top: solid 2rpx #EBEBEB;
 }
+page {
+  background-color: #F5F5F5;
+}
 .tomorrow-title {
   font-family: DeliciousMocha;
   font-size: 200%;

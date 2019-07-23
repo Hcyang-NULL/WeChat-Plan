@@ -1,0 +1,111 @@
+<template>
+    <view>
+        <view style="height: 40rpx"></view>
+        <view wx:for="{{plans}}">
+            <view class="item" style="height:{{height[index]}}rpx">
+                <view class="content-item">
+                    {{item[0]}}
+                </view>
+                <view wx:if="{{item[1] != ''}}" class="detail">
+                    {{item[1]}}
+                </view>
+            </view>
+        </view>
+        <view style="height: 80rpx"></view>
+    </view>
+</template>
+
+<script>
+    const app = getApp();
+    let plans = [];
+    export default {
+        config: {
+            navigationBarTitleText: '今日计划'
+        },
+        data: {
+            plans: [],
+            height: []
+        },
+        onLoad() {
+            plans = app.globalData.today;
+            console.log(plans)
+            this.convert()
+            // this.setData({
+            //     plans: plans    
+            // })
+        },
+        convert() {
+            let temp = []
+            let height = []
+            for (let i = 0; i < plans.length; i++) {
+                let now = plans[i];
+                let p = ''
+                for (let j = 0; j < now.length - 1; j++) {
+                    p += now[j]
+                }
+                let temp_now = []
+                temp_now.push(p)
+                temp_now.push(now[now.length - 1])
+                temp.push(temp_now)
+                if (temp_now[1] == '') {
+                    height.push('60');
+                } else {
+                    height.push('110');
+                }
+            }
+            this.setData({
+                height: height,
+                plans: temp
+            })
+        },
+    }
+</script>
+
+<style lang="less">
+    page{
+        background-color: #F5F5F5;
+    }
+
+    .ui-col-content {
+        line-height: 50px;
+    }
+
+    .plan-img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .item {
+        width: 90%;
+        margin-left: 5%;
+        // height: 60rpx;
+        // min-height: 60rpx;
+        margin-bottom: 4%;
+    }
+
+    .content-item {
+        border: solid 3rpx #EBEBEB;
+        border-radius: 10rpx;
+        background-color: white;
+        height: 60rpx;
+        box-shadow: 5rpx 5rpx 2rpx rgba(0, 0, 0, .2);
+        text-align: left;
+        line-height: 60rpx;
+        font-size: 95%;
+        margin-top: 10rpx;
+        float: left;
+        width: 100%;
+        padding-left: 4%;
+    }
+
+    .detail {
+        float: left;
+        font-size: 80%;
+        margin-left: 3%;
+        padding-top: 2%;
+        height: 50rpx;
+        margin-top: 5rpx;
+        clear: both;
+    }
+
+</style>

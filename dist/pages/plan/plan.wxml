@@ -26,4 +26,5 @@
     </view>
     <view class="content-add">手动添加</view>
   </view>
+  <view style="height:80rpx"></view>
 </view>

@@ -1,15 +1,82 @@
 <template>
-  <view></view>
+    <view>
+        <ui-row-list>
+            <ui-row height="50" wx:for='{{plans}}'>
+                <ui-col width="40" vertical-align="middle" align="center">
+                    <ui-icon type="success" size="20" color="{{colors[index]}}"></ui-icon>
+                </ui-col>
+                <ui-col class="text" wx:if="{{item[1] == -1}}">
+                    {{item[0]}} 未检查
+                </ui-col>
+                <ui-col class="text" wx:else>
+                    {{item[0]}} 完成率：{{item[1]}}%
+                </ui-col>
+                <ui-col width="40" vertical-align="middle" id="{{index}}" bindtap='details'>
+                    <ui-icon type="arrow-right"></ui-icon>
+                </ui-col>
+            </ui-row>
+        </ui-row-list>
+    </view>
 </template>
 
 <script>
-export default {
-  config: {
-    navigationBarTitleText: ''
-  },
-  data: {}
-}
+    const app = getApp()
+    let plans = [];
+    export default {
+        config: {
+            navigationBarTitleText: 'Statistics'
+        },
+        data: {
+            plans: [
+                ['21st-July', 80.00],
+                ['22nd-July', 10.54],
+                ['23rd-July', 40.12],
+                ['24th-July', 70.89],
+            ],
+            colors: []
+        },
+        onShow() {
+            const that = this;
+            wx.request({
+                url: app.globalData.server+'/past',
+                data: {},
+                header: {'content-type':'application/json'},
+                method: 'GET',
+                dataType: 'json',
+                success: (result)=>{
+                    console.log(result)
+                    that.setData({
+                        plans: result.data.plans,
+                        colors: result.data.colors
+                    })
+                },
+                fail: ()=>{},
+                complete: ()=>{}
+            });
+        },
+        details(e) {
+            console.log(e)
+            let id = e.currentTarget.id;
+            const that = this;
+            if(this.data.plans[id][1] == -1)
+            {
+                wx.navigateTo({
+                    url: '../check/check?past=1&today='+that.data.plans[id][2],
+                });
+            }
+            else
+            {
+                wx.navigateTo({
+                    url: '../details/details?date='+that.data.plans[id][2],
+                });
+            }
+        }
+    }
 </script>
 
 <style lang="less">
+    .ui-col-content{
+        line-height: 50px;
+    }
+
 </style>

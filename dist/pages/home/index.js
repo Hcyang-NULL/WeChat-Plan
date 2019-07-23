@@ -22,8 +22,9 @@ exports.default = Page({
         });
     },
     check: function check() {
+        var that = this;
         wx.navigateTo({
-            url: '../check/check'
+            url: '../check/check?past=0&today=' + that.data.cdate
         });
     },
     past: function past() {
@@ -31,26 +32,35 @@ exports.default = Page({
             url: '../past/past'
         });
     },
+    view_today: function view_today() {
+        wx.navigateTo({
+            url: '../today/today'
+        });
+    },
     onLoad: function onLoad() {
+        wx.setEnableDebug({
+            enableDebug: true
+        });
         var date = new Date();
         var week = date.getDay();
         var month = date.getMonth();
         var day = date.getDate();
-        var cdate = days[day - 1] + " " + months[month - 1];
+        console.log(month);
+        var cdate = days[day - 1] + " " + months[month];
         if (day == 31) {
             tomorrow = days[0] + " " + months[month];
         } else {
-            tomorrow = days[day] + " " + months[month - 1];
+            tomorrow = days[day] + " " + months[month];
         }
 
-        var plan = [];
+        var today = [];
         var that = this;
         var hour = date.getHours();
         var minute = date.getMinutes();
         wx.request({
             url: app.globalData.server + '/tomorrow',
             data: {
-                'date': tomorrow
+                'date': cdate
             },
             header: {
                 'content-type': 'application/json'
@@ -59,27 +69,34 @@ exports.default = Page({
             dataType: 'json',
             success: function success(result) {
                 console.log(result);
-                plan = result.data.plan;
-                app.globalData.plan = result.data.plan;
+                today = result.data.plan;
+                app.globalData.today = result.data.plan;
 
-                if (plan == []) {
+                if (today == []) {
                     that.setData({
                         now_mission: '未计划'
                     });
                 } else {
                     var find = '';
-                    for (var i = 0; i < plan.length; i++) {
-                        var now = plan[i];
+                    for (var i = 0; i < today.length; i++) {
+                        var now = today[i];
                         if (hour >= now[0] && now[4] != '' && hour <= now[4]) {
-                            if (hour == now[0] && minute >= now[2]) {
-                                find = now[8];
-                                break;
-                            } else if (hour == now[4] && minute <= now[6]) {
-                                find = now[8];
-                                break;
-                            } else if (hour != now[0] && hour != now[4]) {
-                                find = now[8];
-                                break;
+                            if (now[0] != now[4]) {
+                                if (hour == now[0] && minute >= now[2]) {
+                                    find = now[8];
+                                    break;
+                                } else if (hour == now[4] && minute <= now[6]) {
+                                    find = now[8];
+                                    break;
+                                } else if (hour != now[0] && hour != now[4]) {
+                                    find = now[8];
+                                    break;
+                                }
+                            } else {
+                                if (minute >= now[2] && minute <= now[6]) {
+                                    find = now[8];
+                                    break;
+                                }
                             }
                         }
                     }
@@ -96,7 +113,7 @@ exports.default = Page({
         });
 
         this.setData({
-            cweek: weeks[week - 1],
+            cweek: weeks[week],
             cdate: cdate
         });
     }

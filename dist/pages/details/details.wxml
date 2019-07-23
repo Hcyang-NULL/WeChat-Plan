@@ -1,0 +1,26 @@
+<view>
+  <view class="ui-row-list" style="">
+    <view wx:for="{{details}}" class="ui-row" style="height:50px;">
+      <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 40px;">
+        <view class="ui-col-content align-center valign-middle">
+          <image src="../../image/plan.png" mode="aspectFit" class="plan-img" />
+        </view>
+      </view>
+      <view class="text ui-col" style="">
+        <view class="ui-col-content">
+          {{item[0]}}
+        </view>
+      </view>
+      <view wx:if="{{item[1]==1}}" class="ui-col valign-middle" style="flex:0 0 40px;">
+        <view class="ui-col-content valign-middle">
+          <span type="success" size="20" color="#34A853" class="ui-icon icon-success" style="color: #34A853;font-size: 20px;"></span>
+        </view>
+      </view>
+      <view wx:else="" class="ui-col valign-middle" style="flex:0 0 40px;">
+        <view class="ui-col-content valign-middle">
+          <span type="cancel" size="20" color="#EA4335" class="ui-icon icon-cancel" style="color: #EA4335;font-size: 20px;"></span>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

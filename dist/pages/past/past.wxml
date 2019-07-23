@@ -1,1 +1,26 @@
-<view></view>
+<view>
+  <view class="ui-row-list" style="">
+    <view wx:for="{{plans}}" class="ui-row" style="height:50px;">
+      <view class="ui-col ui-col-align-center align-center valign-middle" style="flex:0 0 40px;">
+        <view class="ui-col-content align-center valign-middle">
+          <span type="success" size="20" color="{{colors[index]}}" class="ui-icon icon-success" style="color: {{colors[index]}};font-size: 20px;"></span>
+        </view>
+      </view>
+      <view class="text ui-col" wx:if="{{item[1] == -1}}" style="">
+        <view class="ui-col-content">
+          {{item[0]}} 未检查
+        </view>
+      </view>
+      <view class="text ui-col" wx:else="" style="">
+        <view class="ui-col-content">
+          {{item[0]}} 完成率：{{item[1]}}%
+        </view>
+      </view>
+      <view id="{{index}}" bindtap="details" class="ui-col valign-middle" style="flex:0 0 40px;">
+        <view class="ui-col-content valign-middle">
+          <span type="arrow-right" class="ui-icon icon-arrow-right" style="font-size: 16px;"></span>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

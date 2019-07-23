@@ -1,0 +1,63 @@
+<template>
+    <view>
+        <ui-row-list>
+            <ui-row height="50" wx:for='{{details}}'>
+                <ui-col width="40" vertical-align="middle" align="center">
+                    <image src='../../image/plan.png' mode='aspectFit' class="plan-img" />
+                </ui-col>
+                <ui-col class="text">
+                    {{item[0]}}
+                </ui-col>
+                <ui-col width="40" vertical-align="middle" wx:if="{{item[1]==1}}">
+                    <ui-icon type="success" size="20" color="#34A853"></ui-icon>
+                </ui-col>
+                <ui-col width="40" vertical-align="middle" wx:else>
+                    <ui-icon type="cancel" size="20" color="#EA4335" ></ui-icon>
+                </ui-col>
+            </ui-row>
+        </ui-row-list>
+    </view>
+</template>
+
+<script>
+    const app = getApp()
+    export default {
+        config: {
+            navigationBarTitleText: 'Details'
+        },
+        data: {
+            details: []
+        },
+        onLoad(options) {
+            console.log(options)
+            const that = this;
+            wx.request({
+                url: app.globalData.server+'/details',
+                data: {
+                    'date': options.date
+                },
+                header: {'content-type':'application/json'},
+                method: 'POST',
+                dataType: 'json',
+                success: (result)=>{
+                    that.setData({
+                        details: result.data.details
+                    })
+                },
+                fail: ()=>{},
+                complete: ()=>{}
+            });
+        }
+    }
+</script>
+
+<style lang="less">
+    .ui-col-content {
+        line-height: 50px;
+    }
+
+    .plan-img{
+        width: 20px;
+        height: 20px;
+    }
+</style>

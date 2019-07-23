@@ -205,20 +205,24 @@ exports.default = Page({
         });
     },
     delete: function _delete() {
-        app.globalData.plan.splice(id, 1);
-        wx.request({
-            url: app.globalData.server + '/store',
-            data: {
-                'date': tomorrow,
-                'plan': app.globalData.plan
-            },
-            header: { 'content-type': 'application/json' },
-            method: 'POST',
-            dataType: 'json',
-            success: function success(result) {
-                console.log(result);
-            }
-        });
+        console.log(id);
+        console.log(app.globalData.plan.length);
+        if (id < app.globalData.plan.length) {
+            app.globalData.plan.splice(id, 1);
+            wx.request({
+                url: app.globalData.server + '/store',
+                data: {
+                    'date': tomorrow,
+                    'plan': app.globalData.plan
+                },
+                header: { 'content-type': 'application/json' },
+                method: 'POST',
+                dataType: 'json',
+                success: function success(result) {
+                    console.log(result);
+                }
+            });
+        }
         wx.navigateBack({
             delta: 1
         });

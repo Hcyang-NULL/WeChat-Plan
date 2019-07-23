@@ -28,12 +28,14 @@
             </view>
             <view class="content-add">手动添加</view>
         </view>
+        <view style="height:80rpx"></view>
     </view>
 </template>
 
 <script>
     const app = getApp()
     let plan = []
+    let tomorrow;
     export default {
         config: {
             navigationBarTitleText: 'Tomorrow'
@@ -44,35 +46,39 @@
             height: []
         },
         onLoad(options) {
-            console.log(options)
-            const that = this;
+            console.log('onload')
+            // console.log('----------')
+            // console.log()
+            // console.log('----------')
+            tomorrow = options.tomorrow
             this.setData({
-                tomorrow: options.tomorrow
+                tomorrow: tomorrow
             })
-            this.convert()
-            // wx.request({
-            //     url: app.globalData.server + '/tomorrow',
-            //     data: {
-            //         'date': options.tomorrow
-            //     },
-            //     header: {
-            //         'content-type': 'application/json'
-            //     },
-            //     method: 'POST',
-            //     dataType: 'json',
-            //     success: (result) => {
-            //         console.log(result)
-            //         plan = result.data.plan;
-            //         app.globalData.plan = result.data.plan;
-            //         that.convert()
-            //     },
-            //     fail: () => {},
-            //     complete: () => {}
-            // });
+            const that = this;
+            wx.request({
+                url: app.globalData.server + '/tomorrow',
+                data: {
+                    'date': tomorrow
+                },
+                header: {
+                    'content-type': 'application/json'
+                },
+                method: 'POST',
+                dataType: 'json',
+                success: (result) => {
+                    console.log(result)
+                    plan = result.data.plan;
+                    app.globalData.plan = result.data.plan;
+                    that.convert()
+                },
+                fail: () => {},
+                complete: () => {}
+            });
         },
         convert() {
             let temp = []
             let height = []
+            console.log('confirm convert')
             for (let i = 0; i < plan.length; i++) {
                 let now = plan[i];
                 let p = ''
@@ -89,6 +95,8 @@
                     height.push('110');
                 }
             }
+            console.log('convert')
+            console.log(temp)
             this.setData({
                 height: height,
                 plan: temp
@@ -96,10 +104,8 @@
             console.log(this.data.height)
         },
         onShow() {
-            if (app.globalData.plan.length != 0) {
-                plan = app.globalData.plan;
-                this.convert()
-            }
+            plan = app.globalData.plan;
+            this.convert()
         },
         torecog() {
             const that = this;
@@ -118,10 +124,12 @@
             let event = plan[id][8];
             let detail = plan[id][9];
             console.log(shour)
-            console.log('tomorrow'+that.data.tomorrow+'&id=' + id + "&shour=" + shour + "&smin=" + smin + "&ehour=" + ehour + "&emin=" + emin +
+            console.log('tomorrow' + that.data.tomorrow + '&id=' + id + "&shour=" + shour + "&smin=" + smin +
+                "&ehour=" + ehour + "&emin=" + emin +
                 "&event=" + event + "&detail=" + detail)
             wx.navigateTo({
-                url: '../modify/modify?tomorrow='+that.data.tomorrow+'&id=' + id + "&shour=" + shour + "&smin=" + smin + "&ehour=" + ehour +
+                url: '../modify/modify?tomorrow=' + that.data.tomorrow + '&id=' + id + "&shour=" + shour +
+                    "&smin=" + smin + "&ehour=" + ehour +
                     "&emin=" + emin + "&event=" + event + "&detail=" + detail,
             });
         },
@@ -129,7 +137,8 @@
             let id = app.globalData.plan.length;
             const that = this;
             wx.navigateTo({
-                url: '../modify/modify?tomorrow='+that.data.tomorrow+'&id='+id+"&shour=12&smin=30&ehour=12&emin=30&event=&detail=",
+                url: '../modify/modify?tomorrow=' + that.data.tomorrow + '&id=' + id +
+                    "&shour=12&smin=30&ehour=12&emin=30&event=&detail=",
             });
         }
     }
@@ -142,6 +151,10 @@
         height: 100%;
         background-color: #F5F5F5;
         border-top: solid 2rpx #EBEBEB;
+    }
+
+    page {
+        background-color: #F5F5F5;
     }
 
     .tomorrow-title {
@@ -232,6 +245,7 @@
         height: 60rpx;
         margin-top: 10%;
         margin-left: 35%;
+        // margin-bottom: 10%;
     }
 
     .add-img-container {

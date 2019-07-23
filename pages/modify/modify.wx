@@ -291,20 +291,25 @@
             });
         },
         delete() {
-            app.globalData.plan.splice(id, 1)
-            wx.request({
-                url: app.globalData.server+'/store',
-                data: {
-                    'date': tomorrow,
-                    'plan': app.globalData.plan
-                },
-                header: {'content-type':'application/json'},
-                method: 'POST',
-                dataType: 'json',
-                success: (result)=>{
-                    console.log(result)
-                }
-            });
+            console.log(id)
+            console.log(app.globalData.plan.length)
+            if(id < app.globalData.plan.length)
+            {
+                app.globalData.plan.splice(id, 1)
+                wx.request({
+                    url: app.globalData.server+'/store',
+                    data: {
+                        'date': tomorrow,
+                        'plan': app.globalData.plan
+                    },
+                    header: {'content-type':'application/json'},
+                    method: 'POST',
+                    dataType: 'json',
+                    success: (result)=>{
+                        console.log(result)
+                    }
+                });
+            }
             wx.navigateBack({
                 delta: 1
             });
@@ -317,6 +322,10 @@
         height: 100%;
         background-color: #F5F5F5;
         border-top: solid 2rpx #EBEBEB;
+    }
+
+    page{
+        background-color: #F5F5F5;
     }
 
     ui-tabs {
@@ -332,9 +341,7 @@
 
     .sliderbox {
         display: table;
-        // padding: 20px;
         width: 100%;
-        // height: 60px;
         background-color: white;
         text-align: center
     }

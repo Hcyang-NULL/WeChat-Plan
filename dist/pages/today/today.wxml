@@ -1,0 +1,14 @@
+<view>
+  <view style="height: 40rpx"></view>
+  <view wx:for="{{plans}}">
+    <view class="item" style="height:{{height[index]}}rpx">
+      <view class="content-item">
+        {{item[0]}}
+      </view>
+      <view wx:if="{{item[1] != ''}}" class="detail">
+        {{item[1]}}
+      </view>
+    </view>
+  </view>
+  <view style="height: 80rpx"></view>
+</view>

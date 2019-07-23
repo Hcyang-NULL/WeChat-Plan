@@ -17,6 +17,9 @@
     <view class="make-plan btn" bindtap="plan">
       Plan Tomorrow
     </view>
+    <view class="view-today btn" bindtap="view_today">
+      View Today
+    </view>
     <view class="check-plan btn" bindtap="check">
       Check Today
     </view>

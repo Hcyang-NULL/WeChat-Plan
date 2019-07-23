@@ -22,3 +22,7 @@
 .ui-col-content {
   line-height: 50px;
 }
+.plan-img {
+  width: 20px;
+  height: 20px;
+}
